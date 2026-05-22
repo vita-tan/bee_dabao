@@ -87,6 +87,22 @@
       }
     },
     {
+      "path": "pages/trace/list",
+      "style": {
+        "navigationBarTitleText": "追溯码",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/trace/generate",
+      "style": {
+        "navigationBarTitleText": "生成追溯码",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
       "path": "pages/mine/notifications",
       "style": {
         "navigationBarTitleText": "消息通知",

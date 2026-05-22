@@ -402,7 +402,8 @@ export class AdminService {
     const pageSize = Math.min(100, Math.max(1, Number(dto.pageSize) || 20));
     const offset = (page - 1) * pageSize;
 
-    const [rows] = await this.bkNotificationRepo.query(
+    // TypeORM 0.3+ query() 直接返回 rows 数组，不用解构 [rows]
+    const rows = await this.bkNotificationRepo.query(
       `SELECT bn.id, bn.isRead, bn.readAt,
               n.id AS notificationId, n.title, n.type, n.content, n.urgency, n.publishTime
        FROM beekeeper_notifications bn
@@ -413,13 +414,14 @@ export class AdminService {
       [beekeeperId, pageSize, offset],
     );
 
-    const [countResult] = await this.bkNotificationRepo.query(
+    const countRows = await this.bkNotificationRepo.query(
       `SELECT COUNT(*) AS total
        FROM beekeeper_notifications bn
        LEFT JOIN notifications n ON bn.notificationId = n.id
        WHERE bn.beekeeperId = ? AND n.status = 1`,
       [beekeeperId],
     );
+    const countResult = countRows[0];
 
     const total = Number(countResult?.total || 0);
     return paginate(rows, total, dto);

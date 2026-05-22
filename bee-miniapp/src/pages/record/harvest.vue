@@ -143,7 +143,21 @@ async function submit() {
   try {
     await request({ url: '/app/harvests', method: 'POST', data: payload })
     uni.showToast({ title: '提交成功', icon: 'success' })
-    setTimeout(() => uni.navigateBack(), 1200)
+    setTimeout(() => {
+      uni.showModal({
+        title: '是否生成追溯码？',
+        content: '采蜜记录已保存，是否为此批次蜂蜜生成消费者追溯码？',
+        confirmText: '去生成',
+        cancelText: '稍后',
+        success: (res: any) => {
+          if (res.confirm) {
+            uni.navigateTo({ url: '/pages/trace/generate' })
+          } else {
+            uni.navigateBack()
+          }
+        },
+      })
+    }, 1200)
   } catch {
     addToOfflineQueue({ url: '/app/harvests', method: 'POST', data: payload })
     uni.showToast({ title: '已保存离线', icon: 'none' })

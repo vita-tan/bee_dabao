@@ -6,12 +6,14 @@
     <!-- 天气卡片 -->
     <view class="weather-card">
       <view class="weather-left">
+        <text class="weather-icon">{{ weather.icon }}</text>
         <text class="weather-temp">{{ weather.temp }}°</text>
         <text class="weather-desc">{{ weather.desc }}</text>
       </view>
       <view class="weather-right">
         <view class="weather-info-box">
-          <text class="weather-location">{{ firstApiary?.name || '暂无蜂场' }}</text>
+          <text class="weather-location">📍 南浦溪镇</text>
+          <text class="weather-range" v-if="weather.high !== '--'">{{ weather.low }}° ~ {{ weather.high }}°</text>
           <text class="weather-hint" v-if="weather.hint">{{ weather.hint }}</text>
         </view>
       </view>
@@ -61,6 +63,12 @@
             <text class="quick-emoji">💰</text>
           </view>
           <text class="quick-label">记录收支</text>
+        </view>
+        <view class="quick-item" hover-class="quick-item-active" @tap="navTo('/pages/trace/list')">
+          <view class="quick-icon" style="background: linear-gradient(135deg, #e8f5e9, #a5d6a7)">
+            <text class="quick-emoji">🏷️</text>
+          </view>
+          <text class="quick-label">追溯码</text>
         </view>
       </view>
     </view>
@@ -143,7 +151,7 @@
 import { ref, onMounted } from 'vue'
 import { request } from '@/utils/http'
 
-const weather = ref({ temp: '--', desc: '加载中', hint: '' })
+const weather = ref({ temp: '--', desc: '加载中', hint: '', icon: '🌤️', high: '--', low: '--' })
 const apiaries = ref<any[]>([])
 const todos = ref<any[]>([])
 const notices = ref<any[]>([])
@@ -156,8 +164,15 @@ const healthLabel: Record<number, string> = {
   4: '异常',
 }
 
+const tabBarPages = ['/pages/index/index', '/pages/apiary/list', '/pages/account/index', '/pages/mine/index']
+
 function navTo(url: string) {
-  uni.navigateTo({ url })
+  const path = url.split('?')[0]
+  if (tabBarPages.includes(path)) {
+    uni.switchTab({ url })
+  } else {
+    uni.navigateTo({ url })
+  }
 }
 
 async function loadData() {
@@ -190,7 +205,65 @@ async function loadData() {
   }
 }
 
-onMounted(loadData)
+const weatherCodeMap: Record<number, string> = {
+  0: '晴', 1: '少云', 2: '多云', 3: '阴',
+  45: '雾', 48: '冻雾',
+  51: '小雨', 53: '中雨', 55: '大雨',
+  61: '小雨', 63: '中雨', 65: '大雨',
+  71: '小雪', 73: '中雪', 75: '大雪',
+  80: '阵雨', 81: '中阵雨', 82: '大阵雨',
+  95: '雷暴', 96: '雷暴+冰雹', 99: '强雷暴',
+}
+
+function getWeatherEmoji(code: number): string {
+  if (code === 0) return '☀️'
+  if (code <= 2) return '🌤️'
+  if (code === 3) return '☁️'
+  if (code <= 48) return '🌫️'
+  if (code <= 55) return '🌦️'
+  if (code <= 65) return '🌧️'
+  if (code <= 75) return '❄️'
+  if (code <= 82) return '🌧️'
+  return '⛈️'
+}
+
+function getBeekeepingHint(code: number, precipProb: number, maxTemp: number, minTemp: number): string {
+  if (code === 95 || code === 96 || code === 99) return '⛈️ 雷暴预警，注意蜂箱安全'
+  const rainCodes = [51, 53, 55, 61, 63, 65, 80, 81, 82]
+  if (rainCodes.includes(code) && precipProb >= 60) return '⚠️ 今日有雨，不宜外出采蜜'
+  if (maxTemp >= 35) return '🔥 高温预警，注意蜂群通风降温'
+  if (minTemp <= 5) return '❄️ 低温预警，注意蜂箱保温'
+  if (code <= 2 && maxTemp >= 15 && maxTemp <= 30) return '✅ 天气晴好，适合采蜜作业'
+  if (code <= 2) return '☀️ 天气不错，可进行日常巡查'
+  if (rainCodes.includes(code) && precipProb >= 30) return '🌧️ 有降雨可能，合理安排作业'
+  return '🐝 可进行常规蜂场作业'
+}
+
+async function fetchWeather() {
+  try {
+    const resp = await fetch(
+      'https://api.open-meteo.com/v1/forecast?latitude=27.62049&longitude=119.938444&current_weather=true&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max&timezone=Asia/Shanghai&forecast_days=1'
+    )
+    if (!resp.ok) throw new Error('Network error')
+    const data = await resp.json()
+    const current = data.current_weather
+    const daily = data.daily
+
+    const code = current.weathercode
+    weather.value.temp = Math.round(current.temperature)
+    weather.value.desc = weatherCodeMap[code] || '未知'
+    weather.value.icon = getWeatherEmoji(code)
+    weather.value.high = Math.round(daily.temperature_2m_max[0])
+    weather.value.low = Math.round(daily.temperature_2m_min[0])
+
+    const precipProb = daily.precipitation_probability_max?.[0] || 0
+    weather.value.hint = getBeekeepingHint(code, precipProb, weather.value.high, weather.value.low)
+  } catch {
+    weather.value.desc = '获取失败'
+  }
+}
+
+onMounted(() => { loadData(); fetchWeather() })
 </script>
 
 <style scoped lang="scss">
@@ -243,8 +316,15 @@ onMounted(loadData)
 }
 
 .weather-left {
+  display: flex;
+  flex-direction: column;
   position: relative;
   z-index: 1;
+}
+
+.weather-icon {
+  font-size: 48rpx;
+  margin-bottom: 4rpx;
 }
 
 .weather-temp {
@@ -279,6 +359,13 @@ onMounted(loadData)
   font-size: 26rpx;
   display: block;
   line-height: 1.4;
+}
+
+.weather-range {
+  font-size: 22rpx;
+  opacity: 0.85;
+  display: block;
+  margin-top: 4rpx;
 }
 
 .weather-hint {

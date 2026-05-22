@@ -13,10 +13,7 @@ export class Account {
   @Column({ type: 'bigint', comment: '蜂农ID' })
   beekeeperId: number;
 
-  @Column({
-    type: 'tinyint',
-    comment: '类型: 1收入 2支出',
-  })
+  @Column({ type: 'tinyint', comment: '类型: 1收入 2支出' })
   type: number;
 
   @Column({
@@ -27,20 +24,16 @@ export class Account {
   })
   amount: number;
 
-  @Column({ type: 'varchar', length: 50, comment: '分类' })
+  @Column({ type: 'varchar', length: 100, comment: '分类' })
   category: string;
 
   @Column({ type: 'date', comment: '记录日期' })
   recordDate: Date;
 
-  @Column({ type: 'varchar', length: 500, comment: '备注', nullable: true })
+  @Column({ type: 'text', comment: '备注', nullable: true })
   notes: string;
 
-  @Column({
-    type: 'simple-json',
-    comment: '收据图片URL数组',
-    nullable: true,
-  })
+  @Column({ type: 'simple-json', comment: '收据图片URL数组', nullable: true })
   receiptImages: string[];
 
   @CreateDateColumn({ comment: '创建时间' })

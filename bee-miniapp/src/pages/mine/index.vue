@@ -2,7 +2,10 @@
   <view class="page">
     <!-- 用户信息头部 -->
     <view class="profile-header">
-      <image :src="user?.avatar || 'https://placeholder.co/80x80'" class="avatar" mode="aspectFill" />
+      <image v-if="user?.avatar" :src="user.avatar" class="avatar" mode="aspectFill" />
+      <view v-else class="avatar avatar-fallback">
+        <text class="avatar-initials">{{ userInitials }}</text>
+      </view>
       <view class="profile-info">
         <text class="profile-name">{{ user?.name || '未认证蜂农' }}</text>
         <view class="status-tag" :class="`status-${user?.status}`">
@@ -51,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useUserStore } from '@/stores/user'
 import { request } from '@/utils/http'
@@ -66,6 +69,11 @@ const statusLabel: Record<number, string> = {
   2: '已冻结',
   3: '已拒绝',
 }
+
+const userInitials = computed(() => {
+  const name = user.value?.name || '蜂农'
+  return name.slice(0, 2)
+})
 
 async function loadUnread() {
   try {
@@ -140,6 +148,19 @@ onShow(() => {
   height: 120rpx;
   border-radius: 50%;
   border: 4rpx solid rgba(255,255,255,0.5);
+}
+
+.avatar-fallback {
+  background: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-initials {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #fff;
 }
 
 .profile-info { flex: 1; }
