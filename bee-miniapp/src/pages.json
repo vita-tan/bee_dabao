@@ -1,0 +1,136 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "首页",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/apiary/list",
+      "style": {
+        "navigationBarTitleText": "我的蜂场",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/apiary/edit",
+      "style": {
+        "navigationBarTitleText": "编辑蜂场",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/apiary/detail",
+      "style": {
+        "navigationBarTitleText": "蜂场详情",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/record/inspection",
+      "style": {
+        "navigationBarTitleText": "记录巡查",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/record/harvest",
+      "style": {
+        "navigationBarTitleText": "记录采蜜",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/record/medication",
+      "style": {
+        "navigationBarTitleText": "记录用药",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/account/index",
+      "style": {
+        "navigationBarTitleText": "台账",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/mine/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/mine/notifications",
+      "style": {
+        "navigationBarTitleText": "消息通知",
+        "navigationBarBackgroundColor": "#f5a623",
+        "navigationBarTextStyle": "white"
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#f5a623",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "pagePath": "pages/apiary/list",
+        "text": "蜂场",
+        "iconPath": "static/tabs/apiary.png",
+        "selectedIconPath": "static/tabs/apiary-active.png"
+      },
+      {
+        "pagePath": "pages/account/index",
+        "text": "台账",
+        "iconPath": "static/tabs/account.png",
+        "selectedIconPath": "static/tabs/account-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "static/tabs/mine.png",
+        "selectedIconPath": "static/tabs/mine-active.png"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "蜂农助手",
+    "navigationBarBackgroundColor": "#f5a623",
+    "backgroundColor": "#f5f7fa"
+  }
+}
