@@ -8,7 +8,7 @@ import {
   Descriptions,
   Modal,
   Input,
-  message,
+  App,
   Card,
   Badge,
 } from 'antd'
@@ -22,6 +22,7 @@ const BeekeeperPendingPage: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [rejectNote, setRejectNote] = useState('')
   const [rejectModalOpen, setRejectModalOpen] = useState(false)
+  const { message } = App.useApp()
 
   const { data: list, loading, refresh } = useRequest(() => getPendingBeekeepers())
 

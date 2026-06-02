@@ -10,7 +10,7 @@ import {
   Input,
   Select,
   Switch,
-  message,
+  App,
   DatePicker,
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
@@ -38,7 +38,7 @@ const NotificationsPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [form] = Form.useForm()
-
+  const { message } = App.useApp()
   const { data, loading, refresh } = useRequest(() => getNotifications())
 
   const handleSubmit = async () => {

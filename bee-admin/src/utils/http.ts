@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { message } from 'antd'
+import message from './globalMessage'
 
 const http = axios.create({
   baseURL: '/api',

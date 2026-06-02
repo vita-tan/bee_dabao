@@ -9,7 +9,7 @@ import {
   Modal,
   Form,
   Input,
-  message,
+  App,
   Breadcrumb,
   Badge,
 } from 'antd'
@@ -113,6 +113,7 @@ const AdminLayout: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, logout } = useAuthStore()
+  const { message } = App.useApp()
 
   const handleLogout = async () => {
     try {

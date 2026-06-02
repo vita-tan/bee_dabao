@@ -28,7 +28,7 @@
       <aside class="col-left">
         <!-- 1. 蜂农地区柱状图 -->
         <div class="chart-card">
-          <div class="chart-title">各地区蜂农数量</div>
+          <div class="chart-title">各村蜂农数量</div>
           <div class="echarts-wrap" ref="chart1Ref"></div>
         </div>
 
@@ -82,7 +82,7 @@
 
         <!-- 区域产量排名 -->
         <div class="chart-card">
-          <div class="chart-title">地区产量排名（TOP 10）</div>
+          <div class="chart-title">各村产量排名（TOP 10）</div>
           <div class="echarts-wrap" ref="chart4Ref"></div>
         </div>
 
@@ -292,16 +292,16 @@ function animateNumber(target: { value: number }, end: number) {
 // ─── Mock 数据 ────────────────────────────────────────────────────────────────
 function mockRegionRank() {
   return [
-    { region: '建德市', production: 4820 },
-    { region: '淳安县', production: 3960 },
-    { region: '桐庐县', production: 3410 },
-    { region: '临安区', production: 2850 },
-    { region: '富阳区', production: 2100 },
-    { region: '余杭区', production: 1830 },
-    { region: '萧山区', production: 1560 },
-    { region: '西湖区', production: 1120 },
-    { region: '拱墅区', production: 890 },
-    { region: '滨江区', production: 620 },
+    { region: '南浦溪村', production: 4820 },
+    { region: '库村', production: 3960 },
+    { region: '新源村', production: 3410 },
+    { region: '新兴村', production: 2850 },
+    { region: '周新村', production: 2100 },
+    { region: '孙坪村', production: 1830 },
+    { region: '培坑村', production: 1560 },
+    { region: '双坑村', production: 1120 },
+    { region: '朝头垟村', production: 890 },
+    { region: '包坑村', production: 620 },
   ]
 }
 
@@ -334,14 +334,14 @@ function useAllMockData() {
   subsidyData.budget = 5000000
   subsidyData.paid = 3260000
   recentEvents.value = [
-    '建德市蜂农张伟在「南浦溪蜂场」完成了日常巡查',
-    '淳安县蜂农李芳提交了新采蜜记录 · 槐花蜜 82kg',
-    '临安区蜂农王明申请补贴政策「2026年蜂农扶持计划」',
-    '桐庐县蜂农赵丽完成了用药记录填报并进入停药期',
-    '余杭区新蜂农陈强通过认证审核',
-    '富阳区蜂农刘洋在「花海蜂场」新增蜂箱10只',
-    '建德市蜂农周静采集百花蜜 65kg，波美度 42.3°',
-    '淳安县蜂农孙明完成巡查，发现蜂王状态异常已上报',
+    '南浦溪村蜂农张伟在「南浦溪蜂场」完成了日常巡查',
+    '库村蜂农李芳提交了新采蜜记录 · 槐花蜜 82kg',
+    '新源村蜂农王明申请补贴政策「2026年蜂农扶持计划」',
+    '新兴村蜂农赵丽完成了用药记录填报并进入停药期',
+    '周新村新蜂农陈强通过认证审核',
+    '孙坪村蜂农刘洋在「花海蜂场」新增蜂箱10只',
+    '培坑村蜂农周静采集百花蜜 65kg，波美度 42.3°',
+    '双坑村蜂农孙明完成巡查，发现蜂王状态异常已上报',
   ]
   startScroll()
   renderRegionBar(mockRegionRank())

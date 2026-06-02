@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ConfigProvider } from 'antd'
+import { App, ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import 'dayjs/locale/zh-cn'
 import AppRouter from './router'
+import AppMessageInjector from './components/AppMessageInjector'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -18,7 +19,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         },
       }}
     >
-      <AppRouter />
+      <App>
+        <AppMessageInjector />
+        <AppRouter />
+      </App>
     </ConfigProvider>
   </React.StrictMode>,
 )

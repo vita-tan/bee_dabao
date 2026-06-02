@@ -12,7 +12,7 @@ import {
   Row,
   Col,
   Popconfirm,
-  message,
+  App,
 } from 'antd'
 import { SearchOutlined, ReloadOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
@@ -37,6 +37,7 @@ const levelMap: Record<number, string> = {
 
 const BeekeeperListPage: React.FC = () => {
   const navigate = useNavigate()
+  const { message } = App.useApp()
   const [params, setParams] = useState<any>({ page: 1, pageSize: 20 })
   const [searchKw, setSearchKw] = useState('')
   const [status, setStatus] = useState<number | undefined>()

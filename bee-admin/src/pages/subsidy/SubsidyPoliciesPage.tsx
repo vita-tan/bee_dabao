@@ -11,7 +11,7 @@ import {
   DatePicker,
   InputNumber,
   Select,
-  message,
+  App,
   Row,
   Col,
   Popconfirm,
@@ -40,7 +40,7 @@ const SubsidyPoliciesPage: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [editingPolicy, setEditingPolicy] = useState<any>(null)
   const [form] = Form.useForm()
-
+  const { message } = App.useApp()
   const { data, loading, refresh } = useRequest(() => getSubsidyPolicies())
 
   const handleOpenCreate = () => {
