@@ -1,3 +1,9 @@
+import * as crypto from 'crypto';
+// 补丁：Node.js < 19 没有 globalThis.crypto，TypeORM 内部依赖它
+if (typeof globalThis.crypto === 'undefined') {
+  (globalThis as any).crypto = crypto;
+}
+
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
