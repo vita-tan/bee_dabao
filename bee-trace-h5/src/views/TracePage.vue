@@ -251,6 +251,7 @@ interface TraceData {
 interface BeekeeperInfo {
   name: string
   avatar?: string
+  region?: string
   province: string
   city: string
   district: string

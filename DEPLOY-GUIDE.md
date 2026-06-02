@@ -134,6 +134,8 @@ curl http://localhost:3000/docs
 # 看到 Swagger 文档页面说明启动成功
 ```
 
+> **注意**：所有前端模块的 `vite.config.ts` 已配置 `base` 路径（`/admin/`、`/datascreen/`、`/h5/`、`/trace/`），编译后的资源引用会自动带上子路径前缀，Nginx 按如下配置即可。
+
 ### 第 7 步：配置 Nginx
 
 ```nginx
