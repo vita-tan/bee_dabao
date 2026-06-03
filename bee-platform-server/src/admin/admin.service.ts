@@ -68,7 +68,7 @@ export class AdminService {
 
     // 区域数据隔离
     if (admin.regionCode) {
-      qb.andWhere('b.region_code LIKE :rc', { rc: `${admin.regionCode}%` });
+      qb.andWhere('b.regionCode LIKE :rc', { rc: `${admin.regionCode}%` });
     }
 
     if (dto.keyword) {
@@ -76,13 +76,13 @@ export class AdminService {
     }
     if (dto.status !== undefined) qb.andWhere('b.status = :s', { s: dto.status });
     if (dto.level !== undefined) qb.andWhere('b.level = :l', { l: dto.level });
-    if (dto.regionCode) qb.andWhere('b.region_code LIKE :rc', { rc: `${dto.regionCode}%` });
-    if (dto.creditMin !== undefined) qb.andWhere('b.credit_score >= :cm', { cm: dto.creditMin });
-    if (dto.creditMax !== undefined) qb.andWhere('b.credit_score <= :cmx', { cmx: dto.creditMax });
-    if (dto.registerStart) qb.andWhere('b.created_at >= :rs', { rs: dto.registerStart });
-    if (dto.registerEnd) qb.andWhere('b.created_at <= :re', { re: dto.registerEnd });
+    if (dto.regionCode) qb.andWhere('b.regionCode LIKE :rc', { rc: `${dto.regionCode}%` });
+    if (dto.creditMin !== undefined) qb.andWhere('b.creditScore >= :cm', { cm: dto.creditMin });
+    if (dto.creditMax !== undefined) qb.andWhere('b.creditScore <= :cmx', { cmx: dto.creditMax });
+    if (dto.registerStart) qb.andWhere('b.createdAt >= :rs', { rs: dto.registerStart });
+    if (dto.registerEnd) qb.andWhere('b.createdAt <= :re', { re: dto.registerEnd });
 
-    qb.orderBy('b.created_at', 'DESC');
+    qb.orderBy('b.createdAt', 'DESC');
 
     const [list, total] = await qb
       .skip(dto.skip)
@@ -133,8 +133,8 @@ export class AdminService {
     const subsidyStats = await this.applicationRepo
       .createQueryBuilder('sa')
       .select('COUNT(*)', 'totalApplications')
-      .addSelect('COALESCE(SUM(CASE WHEN sa.status >= 2 THEN sa.approved_amount ELSE 0 END), 0)', 'totalApproved')
-      .where('sa.beekeeper_id = :id', { id })
+      .addSelect('COALESCE(SUM(CASE WHEN sa.status >= 2 THEN sa.approvedAmount ELSE 0 END), 0)', 'totalApproved')
+      .where('sa.beekeeperId = :id', { id })
       .getRawOne();
 
     return {
@@ -220,9 +220,9 @@ export class AdminService {
     const stats = await this.applicationRepo
       .createQueryBuilder('sa')
       .select('COUNT(*)', 'total')
-      .addSelect('COALESCE(SUM(sa.apply_amount), 0)', 'totalApply')
-      .addSelect('COALESCE(SUM(sa.approved_amount), 0)', 'totalApproved')
-      .where('sa.policy_id = :id', { id })
+      .addSelect('COALESCE(SUM(sa.applyAmount), 0)', 'totalApply')
+      .addSelect('COALESCE(SUM(sa.approvedAmount), 0)', 'totalApproved')
+      .where('sa.policyId = :id', { id })
       .getRawOne();
 
     return {
@@ -262,14 +262,14 @@ export class AdminService {
     const qb = this.applicationRepo.createQueryBuilder('sa')
       .leftJoin('sa.beekeeper', 'b')
       .leftJoin('sa.policy', 'p')
-      .select(['sa.id', 'sa.colony_count', 'sa.apply_amount', 'sa.approved_amount', 'sa.status', 'sa.created_at',
+      .select(['sa.id', 'sa.colonyCount', 'sa.applyAmount', 'sa.approvedAmount', 'sa.status', 'sa.createdAt',
         'b.name', 'b.phone', 'p.name']);
 
     if (dto.status !== undefined) qb.andWhere('sa.status = :s', { s: dto.status });
-    if (dto.policyId) qb.andWhere('sa.policy_id = :p', { p: dto.policyId });
+    if (dto.policyId) qb.andWhere('sa.policyId = :p', { p: dto.policyId });
     if (dto.beekeeperKeyword) qb.andWhere('(b.name LIKE :kw OR b.phone LIKE :kw)', { kw: `%${dto.beekeeperKeyword}%` });
 
-    qb.orderBy('sa.created_at', 'DESC');
+    qb.orderBy('sa.createdAt', 'DESC');
     const [list, total] = await qb.skip(dto.skip).take(dto.pageSize).getManyAndCount();
     return paginate(list, total, dto);
   }
@@ -284,8 +284,8 @@ export class AdminService {
     // 辅助审核信息
     const actualColonies = await this.apiaryRepo
       .createQueryBuilder('a')
-      .select('SUM(a.colony_count)', 'total')
-      .where('a.beekeeper_id = :id AND a.status = 1', { id: app.beekeeperId })
+      .select('SUM(a.colonyCount)', 'total')
+      .where('a.beekeeperId = :id AND a.status = 1', { id: app.beekeeperId })
       .getRawOne();
 
     return {
@@ -339,8 +339,8 @@ export class AdminService {
       .createQueryBuilder('sa')
       .select('COUNT(*)', 'total')
       .addSelect('SUM(CASE WHEN sa.status = 0 OR sa.status = 1 THEN 1 ELSE 0 END)', 'pending')
-      .addSelect('COALESCE(SUM(sa.approved_amount), 0)', 'totalApproved')
-      .addSelect('COALESCE(SUM(CASE WHEN sa.status = 4 THEN sa.approved_amount ELSE 0 END)', 'totalPaid')
+      .addSelect('COALESCE(SUM(sa.approvedAmount), 0)', 'totalApproved')
+      .addSelect('COALESCE(SUM(CASE WHEN sa.status = 4 THEN sa.approvedAmount ELSE 0 END), 0)', 'totalPaid')
       .where('1=1')
       .getRawOne();
 
@@ -554,7 +554,7 @@ export class AdminService {
 
     const colonyResult = await this.apiaryRepo
       .createQueryBuilder('a')
-      .select('COALESCE(SUM(a.colony_count), 0)', 'total')
+      .select('COALESCE(SUM(a.colonyCount), 0)', 'total')
       .where('a.status = 1')
       .getRawOne();
 

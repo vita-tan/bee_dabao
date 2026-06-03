@@ -19,7 +19,7 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
   (response) => {
     const data = response.data
-    if (data.code !== undefined && data.code !== 200) {
+    if (data.code !== undefined && data.code !== 200 && data.code !== 0) {
       message.error(data.message || '请求失败')
       return Promise.reject(new Error(data.message))
     }
