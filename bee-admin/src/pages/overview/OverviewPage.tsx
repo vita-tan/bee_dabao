@@ -67,7 +67,7 @@ const AnimatedNumber: React.FC<{ value: number | string; duration?: number }> = 
     typeof value === 'number' && !isNaN(value) ? value : 0,
   )
   const prevValueRef = useRef<number | string>(value)
-  const rafRef = useRef<number>()
+  const rafRef = useRef<number>(0)
 
   useEffect(() => {
     // 仅当 value 变化时启动动画
@@ -110,8 +110,8 @@ const AnimatedNumber: React.FC<{ value: number | string; duration?: number }> = 
 const OverviewPage: React.FC = () => {
   const colonyChartRef = useRef<HTMLDivElement>(null)
   const productionChartRef = useRef<HTMLDivElement>(null)
-  const colonyChartInst = useRef<echarts.ECharts>()
-  const productionChartInst = useRef<echarts.ECharts>()
+  const colonyChartInst = useRef<echarts.ECharts | null>(null)
+  const productionChartInst = useRef<echarts.ECharts | null>(null)
   const [lastUpdated, setLastUpdated] = useState<Date>()
 
   const { data: stats, loading, refresh } = useRequest(

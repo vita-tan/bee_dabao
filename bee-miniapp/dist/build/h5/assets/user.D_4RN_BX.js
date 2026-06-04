@@ -1,0 +1,1 @@
+import{_ as e,$ as s,l as t,Q as o}from"./index-DIy7rVgD.js";const n=e("user",{state:()=>({token:o("bee_token")||"",user:o("bee_user")||null}),actions:{setAuth(e,s){this.token=e,this.user=s,t("bee_token",e),t("bee_user",s)},logout(){this.token="",this.user=null,s("bee_token"),s("bee_user")},isLoggedIn(){return!!this.token}}});export{n as u};

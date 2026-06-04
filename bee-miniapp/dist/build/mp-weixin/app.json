@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/apiary/list",
+    "pages/apiary/edit",
+    "pages/apiary/detail",
+    "pages/record/inspection",
+    "pages/record/harvest",
+    "pages/record/medication",
+    "pages/account/index",
+    "pages/mine/index",
+    "pages/mine/notifications"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "蜂农助手",
+    "navigationBarBackgroundColor": "#f5a623",
+    "backgroundColor": "#f5f7fa"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#f5a623",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "pagePath": "pages/apiary/list",
+        "text": "蜂场",
+        "iconPath": "static/tabs/apiary.png",
+        "selectedIconPath": "static/tabs/apiary-active.png"
+      },
+      {
+        "pagePath": "pages/account/index",
+        "text": "台账",
+        "iconPath": "static/tabs/account.png",
+        "selectedIconPath": "static/tabs/account-active.png"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的",
+        "iconPath": "static/tabs/mine.png",
+        "selectedIconPath": "static/tabs/mine-active.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

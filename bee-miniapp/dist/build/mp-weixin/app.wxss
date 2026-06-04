@@ -1,0 +1,2 @@
+page{font-size:16px;background-color:#f5f7fa;color:#333}.bee-primary{color:#f5a623}.bee-success{color:#2ecc71}.bee-danger{color:#e74c3c}.bee-card{background:#fff;border-radius:12rpx;padding:24rpx;margin-bottom:20rpx}.safe-area-bottom{padding-bottom:env(safe-area-inset-bottom)}
+page{--status-bar-height:25px;--top-window-height:0px;--window-top:0px;--window-bottom:0px;--window-left:0px;--window-right:0px;--window-magin:0px}[data-c-h="true"]{display: none !important;}

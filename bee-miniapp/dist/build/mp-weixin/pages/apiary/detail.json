@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "蜂场详情",
+  "navigationBarBackgroundColor": "#f5a623",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "uni-icons": "../../node-modules/@dcloudio/uni-ui/lib/uni-icons/uni-icons"
+  }
+}
