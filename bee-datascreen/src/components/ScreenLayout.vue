@@ -12,12 +12,6 @@
         <div class="top-title-deco right-deco"></div>
       </div>
       <div class="top-right">
-        <select v-model="regionCode" class="region-select" @change="fetchData">
-          <option value="">全辖区</option>
-          <option value="330100">浙江省·杭州市</option>
-          <option value="330200">浙江省·宁波市</option>
-          <option value="330300">浙江省·温州市</option>
-        </select>
         <span class="update-time">更新于 {{ lastUpdateTime }}</span>
       </div>
     </header>
@@ -173,7 +167,6 @@ tick()
 const clockTimer = setInterval(tick, 1000)
 
 // ─── 数据状态 ─────────────────────────────────────────────────────────────────
-const regionCode = ref('')
 const lastUpdateTime = ref('—')
 
 // KPI 顶部指标
@@ -234,8 +227,7 @@ const COLORS = ['#00d4ff', '#7ecef4', '#2ECC71', '#F5A623', '#e74c3c', '#9b59b6'
 // ─── 数据获取 ─────────────────────────────────────────────────────────────────
 async function fetchData() {
   try {
-    const params = regionCode.value ? { region_code: regionCode.value } : {}
-    const res = await http.get('/admin/stats/screen', { params })
+    const res = await http.get('/admin/stats/screen')
     const d = res?.data || res
 
     // KPI
@@ -669,182 +661,372 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* ============================================================
+   PREMIUM DATA DASHBOARD — 蜂农数字化管理平台
+   Design: Dark-tech glass morphism + cyan glow accents
+   ============================================================ */
+
+/* ─── 容器 ──────────────────────────────────────────────────────────────────── */
 .screen-layout {
   width: 1920px;
   height: 1080px;
   display: flex;
   flex-direction: column;
-  background: var(--c-bg);
+  background: radial-gradient(ellipse at 50% 0%, #0d1b2a 0%, #0a1628 40%, #050d1a 100%);
   overflow: hidden;
+  position: relative;
 }
 
-/* ─── 顶部通栏 ─────────────────────────────────────────────────────────────── */
+/* 背景网格纹 */
+.screen-layout::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── 顶部通栏 ───────────────────────────────────────────────────────────────── */
 .top-bar {
   height: 80px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
-  background: linear-gradient(90deg, #030b1a, #0a1628 40%, #0d1e38 50%, #0a1628 60%, #030b1a);
-  border-bottom: 1px solid rgba(0,212,255,0.15);
+  padding: 0 40px;
+  background: linear-gradient(180deg,
+    rgba(13,27,42,0.98) 0%,
+    rgba(10,22,40,0.92) 60%,
+    rgba(10,22,40,0.85) 100%);
+  border-bottom: 1px solid rgba(0,212,255,0.12);
   position: relative;
+  z-index: 10;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .top-bar::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, #00d4ff 30%, #7ecef4 50%, #00d4ff 70%, transparent);
+  bottom: -1px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0,212,255,0.1) 10%,
+    #00d4ff 30%,
+    #7ecef4 50%,
+    #00d4ff 70%,
+    rgba(0,212,255,0.1) 90%,
+    transparent);
+  filter: blur(1px);
+  animation: topGlow 4s ease-in-out infinite;
 }
 
+@keyframes topGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* 左侧 — 时间 */
 .top-left {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 200px;
+  gap: 0;
+  min-width: 180px;
 }
 
 .top-time {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--c-primary);
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 2px;
-  text-shadow: 0 0 12px rgba(0,212,255,0.5);
+  letter-spacing: 3px;
+  line-height: 1.1;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(0,212,255,0.85) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 14px rgba(0,212,255,0.35));
 }
 
 .top-date {
-  font-size: 13px;
-  color: var(--c-text-sub);
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 1px;
+  margin-top: 2px;
 }
 
+/* 中央 — 标题 */
 .top-center {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 
 .top-title-deco {
-  width: 80px;
+  width: 100px;
   height: 2px;
+  position: relative;
+}
+
+.top-title-deco::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: linear-gradient(90deg, transparent, #00d4ff);
+  border-radius: 1px;
+}
+
+.left-deco::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: #00d4ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.5);
 }
 
 .right-deco {
   transform: scaleX(-1);
 }
 
+.right-deco::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: #00d4ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.5);
+}
+
 .top-title {
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 800;
   color: #fff;
-  letter-spacing: 4px;
-  text-shadow: 0 0 20px rgba(0,212,255,0.4), 0 2px 4px rgba(0,0,0,0.5);
+  letter-spacing: 6px;
+  text-shadow: 0 0 30px rgba(0,212,255,0.35), 0 2px 4px rgba(0,0,0,0.6);
   white-space: nowrap;
+  user-select: none;
 }
 
+/* 右侧 — 更新时间 */
 .top-right {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
-  min-width: 240px;
-}
-
-.region-select {
-  background: rgba(0,212,255,0.08);
-  border: 1px solid rgba(0,212,255,0.3);
-  color: #e0eaf8;
-  padding: 5px 12px;
-  border-radius: 4px;
-  font-size: 13px;
-  outline: none;
-  cursor: pointer;
-}
-
-.region-select option {
-  background: #0a1628;
-  color: #e0eaf8;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 180px;
 }
 
 .update-time {
   font-size: 12px;
-  color: var(--c-text-sub);
+  color: rgba(255,255,255,0.4);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  padding: 4px 14px;
+  background: rgba(0,212,255,0.05);
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 20px;
 }
 
-/* ─── 主体三栏 ─────────────────────────────────────────────────────────────── */
+/* ─── 主体三栏 ───────────────────────────────────────────────────────────────── */
 .main-body {
   flex: 1;
   display: flex;
-  gap: 12px;
-  padding: 12px;
+  gap: 14px;
+  padding: 14px 20px 14px;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .col-left,
 .col-right {
-  width: 390px;
+  width: 400px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .col-center {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   overflow: hidden;
+  min-width: 0;
 }
 
-/* ─── KPI 顶部指标 ─────────────────────────────────────────────────────────── */
+/* ─── 通用卡片 ──────────────────────────────────────────────────────────────── */
+.chart-card {
+  background: linear-gradient(135deg,
+    rgba(10,22,40,0.9) 0%,
+    rgba(14,30,50,0.85) 50%,
+    rgba(10,22,40,0.9) 100%);
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 12px;
+  padding: 16px 18px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.chart-card:hover {
+  border-color: rgba(0,212,255,0.25);
+  box-shadow: 0 0 30px rgba(0,212,255,0.06), inset 0 0 30px rgba(0,212,255,0.02);
+}
+
+/* 卡片顶部装饰线 */
+.chart-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(0,212,255,0.3),
+    transparent);
+}
+
+/* 卡片角落光点 */
+.chart-card::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid rgba(0,212,255,0.15);
+  border-right: 1px solid rgba(0,212,255,0.15);
+  pointer-events: none;
+}
+
+.chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.chart-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 14px;
+  background: var(--c-primary);
+  border-radius: 2px;
+  margin-right: 10px;
+  box-shadow: 0 0 8px rgba(0,212,255,0.4);
+}
+
+.echarts-wrap {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ─── KPI 顶部指标 ──────────────────────────────────────────────────────────── */
 .kpi-row {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
 .kpi-card {
   flex: 1;
-  background: var(--c-card);
-  border: 1px solid var(--c-border);
-  border-radius: 8px;
-  padding: 12px 16px;
+  background: linear-gradient(135deg,
+    rgba(10,22,40,0.92) 0%,
+    rgba(14,32,50,0.88) 100%);
+  border: 1px solid rgba(0,212,255,0.12);
+  border-radius: 12px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   position: relative;
   overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,212,255,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 20px rgba(0,212,255,0.06);
 }
 
 .kpi-card::before {
   content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--c-primary), transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    rgba(0,212,255,0.2),
+    rgba(0,212,255,0.6) 30%,
+    rgba(126,206,244,0.6) 70%,
+    rgba(0,212,255,0.2));
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  bottom: -30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,255,0.04), transparent 70%);
+  pointer-events: none;
 }
 
 .kpi-icon {
-  font-size: 28px;
-  filter: drop-shadow(0 0 6px rgba(0,212,255,0.4));
+  font-size: 34px;
+  filter: drop-shadow(0 0 10px rgba(0,212,255,0.3));
+  flex-shrink: 0;
 }
 
 .kpi-val {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--c-primary);
-  text-shadow: 0 0 10px rgba(0,212,255,0.4);
-  line-height: 1.2;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 16px rgba(0,212,255,0.35);
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
 }
 
 .kpi-label {
-  font-size: 12px;
-  color: var(--c-text-sub);
-  margin-top: 2px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  margin-top: 3px;
+  letter-spacing: 1px;
 }
 
-/* ─── 地图卡片 ─────────────────────────────────────────────────────────────── */
+/* ─── 地图卡片 ──────────────────────────────────────────────────────────────── */
 .map-card {
   flex: 1;
   min-height: 0;
@@ -853,45 +1035,43 @@ onUnmounted(() => {
 .amap-wrap {
   width: 100%;
   height: 100%;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
-/* 高德地图版权信息样式调整 */
 :deep(.amap-logo),
 :deep(.amap-copyright) {
-  opacity: 0.3 !important;
+  opacity: 0.25 !important;
 }
 
-/* Leaflet 弹窗暗色样式 */
 :deep(.dark-popup .leaflet-popup-content-wrapper) {
-  background: rgba(10,22,40,0.95);
+  background: rgba(10,22,40,0.97);
   color: #e0eaf8;
-  border: 1px solid rgba(0,212,255,0.4);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  border: 1px solid rgba(0,212,255,0.3);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(0,212,255,0.08);
 }
 :deep(.dark-popup .leaflet-popup-tip) {
-  background: rgba(10,22,40,0.95);
-  border: 1px solid rgba(0,212,255,0.4);
+  background: rgba(10,22,40,0.97);
+  border: 1px solid rgba(0,212,255,0.3);
 }
 :deep(.dark-popup .leaflet-popup-close-button) {
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.5);
 }
 
-/* ─── 左侧高度分配 ─────────────────────────────────────────────────────────── */
+/* ─── 左栏高度 ──────────────────────────────────────────────────────────────── */
 .col-left .chart-card:nth-child(1) { flex: 3; min-height: 0; }
 .col-left .chart-card:nth-child(2) { flex: 2; min-height: 0; }
 .col-left .chart-card:nth-child(3) { flex: 2.5; min-height: 0; }
 .col-left .chart-card:nth-child(4) { flex: 2; min-height: 0; }
 
-/* ─── 右侧高度分配 ─────────────────────────────────────────────────────────── */
+/* ─── 右栏高度 ──────────────────────────────────────────────────────────────── */
 .col-right .chart-card:nth-child(1) { flex: 2.5; min-height: 0; }
 .col-right .chart-card:nth-child(2) { flex: 2.5; min-height: 0; }
 .col-right .chart-card:nth-child(3) { flex: 2; min-height: 0; }
 .col-right .chart-card:nth-child(4) { flex: 2.5; min-height: 0; }
 
-/* ─── 蜂群翻牌 ─────────────────────────────────────────────────────────────── */
+/* ─── 蜂群翻牌器 ────────────────────────────────────────────────────────────── */
 .stat-card {
   justify-content: center;
 }
@@ -899,38 +1079,41 @@ onUnmounted(() => {
 .flop-wrap {
   display: flex;
   align-items: baseline;
-  gap: 8px;
-  margin: 6px 0;
+  gap: 10px;
+  margin: 8px 0;
 }
 
 .flop-num {
-  font-size: 42px;
-  font-weight: 800;
-  color: var(--c-primary);
-  text-shadow: 0 0 20px rgba(0,212,255,0.5);
+  font-size: 48px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(0,212,255,0.5), 0 0 60px rgba(0,212,255,0.15);
   font-variant-numeric: tabular-nums;
   letter-spacing: 2px;
+  line-height: 1;
 }
 
 .flop-unit {
   font-size: 18px;
-  color: var(--c-text-sub);
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 1px;
 }
 
 .stat-sub {
-  font-size: 13px;
-  color: var(--c-text-sub);
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.5px;
 }
 
-.up { color: #e74c3c; }
-.down { color: #2ECC71; }
+.up { color: #e74c3c; font-weight: 600; }
+.down { color: #2ECC71; font-weight: 600; }
 
-/* ─── 补贴进度 ─────────────────────────────────────────────────────────────── */
+/* ─── 补贴进度 ──────────────────────────────────────────────────────────────── */
 .subsidy-wrap {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding-top: 4px;
+  gap: 12px;
+  padding-top: 6px;
 }
 
 .subsidy-nums {
@@ -939,90 +1122,115 @@ onUnmounted(() => {
 }
 
 .sub-label {
-  font-size: 12px;
-  color: var(--c-text-sub);
-  margin-bottom: 4px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 5px;
+  letter-spacing: 1px;
 }
 
 .sub-val {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--c-primary);
+  color: #fff;
+  text-shadow: 0 0 12px rgba(0,212,255,0.3);
 }
 
 .progress-bar-bg {
-  height: 12px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 6px;
+  height: 14px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 7px;
   overflow: hidden;
   position: relative;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #1a5276, #2ECC71);
-  border-radius: 6px;
-  transition: width 1s ease;
+  background: linear-gradient(90deg, #0d3b66, #1a936f 60%, #2ECC71);
+  border-radius: 7px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  box-shadow: 0 0 12px rgba(46,204,113,0.3);
 }
 
 .progress-bar-fill::after {
   content: '';
   position: absolute;
-  right: 0; top: 0; bottom: 0;
-  width: 4px;
-  background: rgba(255,255,255,0.6);
-  border-radius: 2px;
-  animation: shimmer 1.5s infinite;
+  right: 2px;
+  top: 2px;
+  bottom: 2px;
+  width: 6px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 3px;
+  animation: shimmer 1.5s ease-in-out infinite;
 }
 
 @keyframes shimmer {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
 }
 
 .progress-label {
   text-align: center;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 800;
   color: #2ECC71;
-  text-shadow: 0 0 10px rgba(46,204,113,0.4);
+  text-shadow: 0 0 14px rgba(46,204,113,0.35);
 }
 
-/* ─── 跑马灯 ───────────────────────────────────────────────────────────────── */
+/* ─── 跑马灯 ────────────────────────────────────────────────────────────────── */
 .scroll-board-wrap {
   flex-shrink: 0;
   height: 110px;
 }
 
 .scroll-board {
-  height: 80px;
+  height: 78px;
   overflow: hidden;
   position: relative;
+  mask-image: linear-gradient(180deg,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%);
 }
 
 .scroll-list {
-  transition: transform 0.1s linear;
+  transition: transform 0.08s linear;
 }
 
 .scroll-item {
   height: 32px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-size: 13px;
-  color: rgba(255,255,255,0.75);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  padding: 0 4px;
+  color: rgba(255,255,255,0.7);
+  padding: 0 6px;
+}
+
+.scroll-item:not(:last-child) {
+  border-bottom: 1px solid rgba(255,255,255,0.03);
 }
 
 .scroll-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--c-primary);
   flex-shrink: 0;
-  box-shadow: 0 0 6px var(--c-primary);
+  box-shadow: 0 0 8px rgba(0,212,255,0.6);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(0,212,255,0.4); }
+  50% { box-shadow: 0 0 14px rgba(0,212,255,0.8); }
 }
 
 .scroll-text {
@@ -1030,4 +1238,21 @@ onUnmounted(() => {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+
+/* ─── 全局入场动画 ──────────────────────────────────────────────────────────── */
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kpi-card:nth-child(1) { animation: cardFadeIn 0.5s ease 0.05s both; }
+.kpi-card:nth-child(2) { animation: cardFadeIn 0.5s ease 0.1s both; }
+.kpi-card:nth-child(3) { animation: cardFadeIn 0.5s ease 0.15s both; }
+.kpi-card:nth-child(4) { animation: cardFadeIn 0.5s ease 0.2s both; }
 </style>

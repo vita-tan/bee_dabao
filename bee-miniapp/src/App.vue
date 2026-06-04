@@ -23,10 +23,28 @@ onShow(() => {
 </template>
 
 <style>
+/* 强制所有 uni-app 页面包装层不裁剪水平方向内容 */
+html, body, #app {
+  overflow-x: visible !important;
+  max-width: 100% !important;
+}
+
+.uni-page,
+.uni-page-wrapper,
+.uni-page-body,
+.uni-page-head,
+.uni-page-body > uni-page,
+.uni-page-body > uni-page-wrapper {
+  overflow-x: visible !important;
+  max-width: 100% !important;
+}
+
 page {
   font-size: 16px;
   background-color: #f5f7fa;
   color: #333;
+  overflow-x: visible !important;
+  max-width: 100% !important;
 }
 
 .bee-primary {

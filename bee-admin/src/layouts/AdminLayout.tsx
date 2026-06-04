@@ -38,7 +38,7 @@ const { Header, Sider, Content } = Layout
 const menuItems = [
   { key: '/overview', icon: <DashboardOutlined />, label: '数据总览' },
   {
-    key: '/beekeepers',
+    key: '/beekeepers-group',
     icon: <TeamOutlined />,
     label: '蜂农管理',
     children: [
@@ -183,7 +183,7 @@ const AdminLayout: React.FC = () => {
           mode="inline"
           selectedKeys={[location.pathname]}
           defaultOpenKeys={[
-            '/beekeepers',
+            '/beekeepers-group',
             '/production',
             '/subsidy',
             '/system',
@@ -194,7 +194,7 @@ const AdminLayout: React.FC = () => {
         />
       </Sider>
 
-      <Layout>
+      <Layout style={{ marginLeft: collapsed ? 80 : 220, transition: 'margin-left 0.2s' }}>
         <Header
           style={{
             background: '#fff',
@@ -227,7 +227,15 @@ const AdminLayout: React.FC = () => {
           </Dropdown>
         </Header>
 
-        <Content style={{ margin: 24, background: '#f5f7fa', minHeight: 'calc(100vh - 64px - 48px)' }}>
+        <Content
+          style={{
+            padding: '24px',
+            background: '#f5f7fa',
+            minHeight: 'calc(100vh - 64px)',
+            overflowX: 'hidden',
+            overflowY: 'auto',
+          }}
+        >
           <Outlet />
         </Content>
       </Layout>

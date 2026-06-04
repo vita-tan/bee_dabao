@@ -562,7 +562,7 @@ export class AdminService {
     const yearProdResult = await this.harvestRepo
       .createQueryBuilder('h')
       .select('COALESCE(SUM(h.quantity), 0)', 'total')
-      .where('h.harvest_date >= :start', { start: yearStart })
+      .where('h.harvestDate >= :start', { start: yearStart })
       .getRawOne();
 
     const recentBeekeepers = await this.beekeeperRepo.find({
